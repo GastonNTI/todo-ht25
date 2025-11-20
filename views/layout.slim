@@ -5,6 +5,16 @@ html lang="en"
     meta name="viewport" content="width=device-width, initial-scale=1.0"/
     link rel="stylesheet" href="/style.css?#{Time.now.to_i}"/
     title Todo
-  body 
-    img src="/img/glhf.png" alt="glhf"/
+  body style="background: cyan"
+
+  
+  nav style="background: cornflowerblue"
+    h1 <a href="/todo">To do</a> <a href="/kategori">Kategori</a>
+
+  section
     ==yield
+
+  img src="/img/better-call-saul-loop.gif" alt="better call saul" style="width:1250px; height:400px"
+
+  footer style="background: darkblue"
+ 

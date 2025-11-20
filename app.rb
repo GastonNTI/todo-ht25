@@ -8,8 +8,14 @@ require 'sinatra/reloader'
 
 
 # Routen /
-get '/' do
+get('/') do
     slim(:index)
 end
 
+get('/todo') do
+    slim(:todo)
+end
 
+get('/kategori') do
+    slim(:kategori)
+end
