@@ -1,20 +1,17 @@
 <!DOCTYPE html>
 html lang="en"
   head
-    meta charset="UTF-8"/
-    meta name="viewport" content="width=device-width, initial-scale=1.0"/
+    meta charset="UTF-8"
+    meta name="viewport" content="width=device-width, initial-scale=1.0"
     link rel="stylesheet" href="/style.css?#{Time.now.to_i}"/
     title Todo
-  body style="background: cyan"
 
-  
-  nav style="background: cornflowerblue"
-    h1 <a href="/todo">To do</a> <a href="/kategori">Kategori</a>
+    img src="https://www.discoverafrica.com/wp-content/uploads/2017/11/what_in_the_world_is_a_shoebill_6_new_stateman-992x661.jpg" alt="Shoebill" style="width:100;height:100"
 
-  section
-    ==yield
+  body style="background-color:powderblue"
+    h1 style="color:black"  ToDo
+    hr style="color:gray"
 
-  img src="/img/better-call-saul-loop.gif" alt="better call saul" style="width:1250px; height:400px"
 
-  footer style="background: darkblue"
- 
+
+    ==yield 

@@ -1,0 +1,50 @@
+h2 style="color:black" Ny ToDo
+form action="/todos/add" method="post"
+    input type="text" name="name" placeholder="Title"
+    input type="text" name="description" placeholder="Description"
+    br
+    label for="category" Category:
+    select name="category" id="category"
+        - @categories.each do |category|
+            option value="#{category["category"]}" #{category["category"]}   
+    input type="submit" value="Add"
+
+hr
+
+h3 style="color:black" Edit categories
+form action="/categories/add" method="post"
+    input type="text" name="category" placeholder="Category Name"
+    input type="submit" value="Add category"
+
+form action="/categories/delete" method="post"
+    select name="category" id="category"
+        - @categories.each do |category|
+            option value="#{category["category"]}" #{category["category"]}
+    input type="submit" value="Delete category"
+
+- @todos.each do |todo|
+    hr
+    h3 style="color:black" #{todo["name"]}
+    p style="color:black"#{todo["description"]}
+    i style="color:black"#{todo["category"]}  
+
+    form action="/#{todo["id"]}/edit" method="get" 
+        input type="submit" value="Edit"
+
+    form action="/#{todo["id"]}/finished" method="post" 
+        input type="submit" value="Finished"
+
+    form action="/todos/#{todo["id"]}/delete" method="post"
+        input type="submit" value="Delete"
+
+    br
+
+hr
+br
+
+h2 style="color:black" Finished ToDos
+- @finished_todos.each do |todo|
+    hr
+    h3 style="color:black" #{todo["name"]}
+    p style="color:black" #{todo["description"]}
+    i style="color:black" #{todo["category"]}

@@ -16,19 +16,30 @@ end
 
 def drop_tables(db)
   db.execute('DROP TABLE IF EXISTS todos')
+  db.execute('DROP TABLE IF EXISTS categories')
 end
 
 def create_tables(db)
   db.execute('CREATE TABLE todos (
               id INTEGER PRIMARY KEY AUTOINCREMENT,
               name TEXT NOT NULL, 
-              description TEXT)')
+              description TEXT,
+              finished boolean, 
+              category INTEGER)')
+
+  db.execute('CREATE TABLE categories (
+              id INTEGER PRIMARY KEY AUTOINCREMENT,
+              category TEXT)')
 end
 
 def populate_tables(db)
-  db.execute('INSERT INTO todos (name, description) VALUES ("Köp mjölk", "3 liter mellanmjölk, eko")')
-  db.execute('INSERT INTO todos (name, description) VALUES ("Köp julgran", "En rödgran")')
-  db.execute('INSERT INTO todos (name, description) VALUES ("Pynta gran", "Glöm inte lamporna i granen och tomten")')
+  db.execute('INSERT INTO todos (name, description, finished, category) VALUES ("Köp mjölk", "3 liter mellanmjölk, eko", false, 1)')
+  db.execute('INSERT INTO todos (name, description, finished, category) VALUES ("Möte", "Möte med chefen kl. 12", false, 2)')
+  db.execute('INSERT INTO todos (name, description, finished, category) VALUES ("Göra läxor", "Göra engelska läxor", false, 3)')
+
+  db.execute('INSERT INTO categories (category) VALUES ("Private")')
+  db.execute('INSERT INTO categories (category) VALUES ("Work")')
+  db.execute('INSERT INTO categories (category) VALUES ("School")')
 end
 
 seed!(db)
