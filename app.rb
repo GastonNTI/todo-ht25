@@ -1,7 +1,75 @@
+#app.rb
 require 'sinatra'
 require 'sqlite3'
 require 'slim'
 require 'sinatra/reloader'
+require 'bcrypt'
+
+enable :sessions
+
+post('/store') do 
+    session[:key] = params[:username]
+    redirect to('/view')
+end
+
+get('/view') do
+    @name = session[:key]
+end
+
+get('/clear_session') do
+ session.clear
+ slim(:login)
+end
+
+
+post('/user/add') do
+    username = params[:username]
+    password = params[:password]
+    password_confirm = params[:password_confirm]
+
+    db = SQLite3::Database.new("db/store.db")
+    result=db.execute("SELECT id FROM users WHERE username=?", username)
+    
+    if result.empty?
+        if password==password_confirm
+            password_digest=BCrypt::Password.create(password)
+            db.execute("INSERT INTO users(username,password_digest) VALUES(?,?)", [username,password_digest])
+            redirect('/welcome')
+        else 
+            redirect('/error') #Lösenord matchar ej
+        end
+    else redirect('/login') #User finns redan
+    end
+end
+
+
+
+post('/login') do
+    username = params[:username]
+    password = params[:password]
+
+    db = SQLite3::Database.new("db/store.db")
+    db.results_as_hash = true
+    result = db.execute("SELECT id, password_digest FROM users WHERE username=?", username)
+
+    if result.empty?
+        redirect('/error')
+    end
+
+    user_id = result.first["id"]
+    password_digest = result.first["password_digest"]
+
+    if BCrypt::Password.new(password_digest) == password
+        session[:user_id] = user_id
+        redirect('/welcome')
+    else
+        redirect('/error')
+    end
+end
+
+get('/login') do
+  slim(:login)
+end
 
 get('/') do
     db = SQLite3::Database.new("db/todos.db")
@@ -20,7 +88,8 @@ post("/todos/add") do
     category = params[:category]
 
     db = SQLite3::Database.new("db/todos.db")
-    category_id = db.execute("SELECT id FROM categories WHERE category = ?", category)
+    db.results_as_hash = true
+    category_id = db.execute("SELECT id FROM categories WHERE category = ?", category).first["id"]
     db.execute("INSERT INTO todos (name, description, finished, category) VALUES (?, ?, ?, ?)", [name, description, "0", category_id])
 
     redirect("/")
@@ -91,7 +160,8 @@ post("/todos/:id/updates") do
   category = params[:category]
 
   db = SQLite3::Database.new("db/todos.db")
-  category_id = db.execute("SELECT id FROM categories WHERE category = ?", category)
+  db.results_as_hash = true
+  category_id = db.execute("SELECT id FROM categories WHERE category = ?", category).first["id"]
   db.execute("UPDATE todos SET name = ?, description = ?, category = ? WHERE id = ?", [name, description, category_id, id])
 
   redirect("/")

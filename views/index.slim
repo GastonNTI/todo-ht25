@@ -25,8 +25,8 @@ form action="/categories/delete" method="post"
 - @todos.each do |todo|
     hr
     h3 style="color:black" #{todo["name"]}
-    p style="color:black"#{todo["description"]}
-    i style="color:black"#{todo["category"]}  
+    p style="color:black" #{todo["description"]}
+    i style="color:black" #{todo["category"]}  
 
     form action="/#{todo["id"]}/edit" method="get" 
         input type="submit" value="Edit"

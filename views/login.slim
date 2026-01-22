@@ -1,0 +1,42 @@
+
+form action="/login" method="post"
+  h2 Logga in
+  
+  label for="user" Användarnamn:
+  input type="text" name="username" id="user" required="required"
+  
+  br
+  br
+  
+  label for="pwd" Lösenord:
+  input type="password" name="password" id="pwd" required="required"
+  
+  br
+  br
+  
+  button type="submit" Logga in
+
+hr
+
+h3 Eller skapa nytt konto
+
+form action="/user/add" method="post"
+  label for="new_user" Användarnamn:
+  input type="text" name="username" id="new_user" required="required"
+  
+  br
+  br
+  
+  label for="new_pwd" Lösenord:
+  input type="password" name="password" id="new_pwd" required="required"
+  
+  br
+  br
+  
+  label for="pwd_confirm" Bekräfta lösenord:
+  input type="password" name="password_confirm" id="pwd_confirm" required="required"
+  
+  br
+  br
+  
+  button type="submit" Skapa konto

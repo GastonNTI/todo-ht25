@@ -1,6 +1,6 @@
 require 'sqlite3'
 
-db = SQLite3::Database.new("todos.db")
+db = SQLite3::Database.new("db/todos.db")
 
 
 def seed!(db)
@@ -17,6 +17,7 @@ end
 def drop_tables(db)
   db.execute('DROP TABLE IF EXISTS todos')
   db.execute('DROP TABLE IF EXISTS categories')
+  db.execute('DROP TABLE IF EXISTS users')
 end
 
 def create_tables(db)
