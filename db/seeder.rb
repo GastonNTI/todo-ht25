@@ -1,36 +1,42 @@
 require 'sqlite3'
 
-db = SQLite3::Database.new("db/todos.db")
+todos_db = SQLite3::Database.new("db/todos.db")
+store_db = SQLite3::Database.new("db/store.db")
 
 
-def seed!(db)
-  puts "Using db file: db/todos.db"
+def seed!(todos_db, store_db)
+  puts "Using db files: db/todos.db and db/store.db"
   puts "🧹 Dropping old tables..."
-  drop_tables(db)
+  drop_tables(todos_db, store_db)
   puts "🧱 Creating tables..."
-  create_tables(db)
+  create_tables(todos_db, store_db)
   puts "🍎 Populating tables..."
-  populate_tables(db)
+  populate_tables(todos_db)
   puts "✅ Done seeding the database!"
 end
 
-def drop_tables(db)
-  db.execute('DROP TABLE IF EXISTS todos')
-  db.execute('DROP TABLE IF EXISTS categories')
-  db.execute('DROP TABLE IF EXISTS users')
+def drop_tables(todos_db, store_db)
+  todos_db.execute('DROP TABLE IF EXISTS todos')
+  todos_db.execute('DROP TABLE IF EXISTS categories')
+  store_db.execute('DROP TABLE IF EXISTS users')
 end
 
-def create_tables(db)
-  db.execute('CREATE TABLE todos (
+def create_tables(todos_db, store_db)
+  todos_db.execute('CREATE TABLE todos (
               id INTEGER PRIMARY KEY AUTOINCREMENT,
               name TEXT NOT NULL, 
               description TEXT,
               finished boolean, 
               category INTEGER)')
 
-  db.execute('CREATE TABLE categories (
+  todos_db.execute('CREATE TABLE categories (
               id INTEGER PRIMARY KEY AUTOINCREMENT,
               category TEXT)')
+
+  store_db.execute('CREATE TABLE users (
+              id INTEGER PRIMARY KEY AUTOINCREMENT,
+              username TEXT NOT NULL UNIQUE,
+              password_digest TEXT NOT NULL)')
 end
 
 def populate_tables(db)
@@ -43,4 +49,4 @@ def populate_tables(db)
   db.execute('INSERT INTO categories (category) VALUES ("School")')
 end
 
-seed!(db)
+seed!(todos_db, store_db)

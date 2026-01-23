@@ -34,11 +34,11 @@ post('/user/add') do
         if password==password_confirm
             password_digest=BCrypt::Password.create(password)
             db.execute("INSERT INTO users(username,password_digest) VALUES(?,?)", [username,password_digest])
-            redirect('/welcome')
+            redirect('/')
         else 
             redirect('/error') #Lösenord matchar ej
         end
-    else redirect('/login') #User finns redan
+    else redirect('/') #User finns redan
     end
 end
 
@@ -49,7 +49,7 @@ post('/login') do
     password = params[:password]
 
     db = SQLite3::Database.new("db/store.db")
-    db.results_as_hash = true
+    db.results_as_hash = true  # LÄGG TILL DENNA
     result = db.execute("SELECT id, password_digest FROM users WHERE username=?", username)
 
     if result.empty?
@@ -59,9 +59,9 @@ post('/login') do
     user_id = result.first["id"]
     password_digest = result.first["password_digest"]
 
-    if BCrypt::Password.new(password_digest) == password
+    if BCrypt::Password.new(password_digest) == password  # ÄNDRA password_digest till password
         session[:user_id] = user_id
-        redirect('/welcome')
+        redirect('/')
     else
         redirect('/error')
     end
@@ -88,8 +88,7 @@ post("/todos/add") do
     category = params[:category]
 
     db = SQLite3::Database.new("db/todos.db")
-    db.results_as_hash = true
-    category_id = db.execute("SELECT id FROM categories WHERE category = ?", category).first["id"]
+    category_id = db.execute("SELECT id FROM categories WHERE category = ?", category)
     db.execute("INSERT INTO todos (name, description, finished, category) VALUES (?, ?, ?, ?)", [name, description, "0", category_id])
 
     redirect("/")
@@ -160,8 +159,7 @@ post("/todos/:id/updates") do
   category = params[:category]
 
   db = SQLite3::Database.new("db/todos.db")
-  db.results_as_hash = true
-  category_id = db.execute("SELECT id FROM categories WHERE category = ?", category).first["id"]
+  category_id = db.execute("SELECT id FROM categories WHERE category = ?", category)
   db.execute("UPDATE todos SET name = ?, description = ?, category = ? WHERE id = ?", [name, description, category_id, id])
 
   redirect("/")
@@ -176,4 +174,8 @@ post("/:id/finished") do
     db.execute("UPDATE todos SET finished = ? WHERE id = ?", [finished, id])
 
     redirect("/")
+end
+
+get('/error') do
+    slim(:error)    
 end
